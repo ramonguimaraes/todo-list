@@ -3,17 +3,20 @@ package com.ramonoguimaraes.todolist
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.ramonoguimaraes.todolist.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var mBinding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        mBinding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(mBinding.root)
 
         val lista = retornaTodo()
-        val recyclerView: RecyclerView = findViewById(R.id.recycler_view_main)
-        recyclerView.adapter = TodoAdapter(lista)
-        recyclerView.layoutManager = LinearLayoutManager(this)
+
+        mBinding.recyclerViewMain.adapter = TodoAdapter(lista)
+        mBinding.recyclerViewMain.layoutManager = LinearLayoutManager(this)
     }
 
     fun retornaTodo(): List<Todo>{
