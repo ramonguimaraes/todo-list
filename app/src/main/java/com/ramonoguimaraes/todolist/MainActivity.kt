@@ -1,7 +1,9 @@
 package com.ramonoguimaraes.todolist
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ramonoguimaraes.todolist.databinding.ActivityMainBinding
 
@@ -12,22 +14,24 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         mBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
+        val lista = arrayListOf<Todo>()
+        val adapter = TodoAdapter(lista)
 
-        val lista = retornaTodo()
+        val launchActivity = registerForActivityResult(StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val data = result?.data
+                val todoTitle = data?.getStringExtra("intent_todo")
+                lista.add(Todo(todoTitle!!, false))
+                adapter.notifyDataSetChanged()
+            }
+        }
 
-        mBinding.recyclerViewMain.adapter = TodoAdapter(lista)
+        mBinding.recyclerViewMain.adapter = adapter
         mBinding.recyclerViewMain.layoutManager = LinearLayoutManager(this)
-    }
 
-    fun retornaTodo(): List<Todo>{
-        return listOf<Todo>(
-            Todo("Titulo 1",false),
-            Todo("Titulo 2",false),
-            Todo("Titulo 3",false),
-            Todo("Titulo 4",false),
-            Todo("Titulo 5",false),
-            Todo("Titulo 6",false),
-            Todo("Titulo 7",false),
-        )
+        mBinding.floatingActionButton.setOnClickListener {
+            val i = Intent(this, CadastroActivity::class.java)
+            launchActivity.launch(i)
+        }
     }
 }

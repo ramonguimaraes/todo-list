@@ -1,26 +1,25 @@
 package com.ramonoguimaraes.todolist
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.ramonoguimaraes.todolist.databinding.MainItemLayoutBinding
 
 class TodoAdapter(private val todoList: List<Todo>): RecyclerView.Adapter<TodoAdapter.MyViewHolder>() {
 
-    class MyViewHolder(view: View): RecyclerView.ViewHolder(view){
+    class MyViewHolder(private val binding: MainItemLayoutBinding): RecyclerView.ViewHolder(binding.root){
         fun binding(todo: Todo){
-            val title = itemView.findViewById<TextView>(R.id.textView_item_title)
-            val checkBox = itemView.findViewById<CheckBox>(R.id.checkbox_item_check)
-
-            title.text = todo.title
+            with(binding) {
+                textViewItemTitle.text = todo.title
+                // TODO: Implementar checkBox
+            }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.main_item_layout, parent, false)
-        return MyViewHolder(view)
+        val inflater = LayoutInflater.from(parent.context)
+        val binding = MainItemLayoutBinding.inflate(inflater, parent, false)
+        return MyViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
